@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet prefetch'>
+	<link href='https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css' rel='stylesheet prefetch'>
+	<link href='https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css' rel='stylesheet prefetch'>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'>
+	</script>
+	<script src='https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js'>
+	</script>
+	<style>
+	   body {
+	     background-color: #212121;
+	   }
+	   .title {
+	     color: #F9F9F9;
+	     font-family: Consolas;
+	   }
+	   i {
+	     color: #F9F9F9;
+	     font-size: 80px;
+	   }
+	   #details {
+	     color: #F9F9F9;
+	     padding-top: 20px;
+	   }
+	</style>
+	<script>
+	$(function() {
+	 $('#unit').change(function() {
+	   if ($("#unit").is(':checked')) {
+	     $("#details").html(degF+" F"+info.substring(4));
+	   } else {
+	     $("#details").html(degC+" C"+info.substring(4));
+	   }
+	 })
+	navigator.geolocation.getCurrentPosition(function(position) {
+	lat = position.coords.latitude;
+	lng = position.coords.longitude;
+	console.log(lat+","+lng);
+	});
+	 $.ajax({
+	   url: 'https://simple-weather.p.mashape.com/weather',
+	   type: 'GET',
+	   data: {"lat":12.970936,"lng":77.621155},
+	   dataType: 'text',
+	   success: function(data) {
+	     //alert(JSON.stringify(data));
+	     info = data;
+	     degC = info.split(" ")[0];
+	     degF = degC * 9 / 5 + 32;
+	     $("#details").html(degC+" C"+info.substring(4));
+	     //console.log(info);
+	   },
+	   //error: function(err) { alert(err); },
+	   beforeSend: function(xhr) {
+	     xhr.setRequestHeader("X-Mashape-Key", "92N8IMXj9hmshK51KiPgLmgjt0opp1SWVUFjsnafTzgzwmOU3y");
+	     xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	     xhr.setRequestHeader("Accept","text/plain");
+	   }
+	 });
+	});
+	</script>
+	<title>Weather Machine</title>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 class="title text-center">Weather-Machine</h1>
+        <h6 class="title text-center">- Rithvik Vibhu</h6>
+				<center>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<i class="wi wi-day-sunny"></i><br>
+					<p id="details">11 c, Snowy at Boston, US</p><br>
+					<br>
+					<input data-off="Celsius" data-on="Fahrenheit" data-size="large" data-toggle="toggle" id="unit" type="checkbox">
+				</center>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
